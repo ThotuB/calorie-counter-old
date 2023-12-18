@@ -22,15 +22,16 @@ export default function RecipeIngredients({ recipeIngredients = [], onSave }: Re
 
     const [ingredients, setIngredients] = useState<IRecipeIngredient[]>(recipeIngredients)
 
-    useEffect(() => {
-        searchFoods(ingredient, 1)
-            .then(res => {
-                setSearchIngredients(res.data.foods)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }, [ingredient])
+    // useEffect(() => {
+    //     searchFoods(ingredient, 1)
+    //         .then(res => {
+    //             setSearchIngredients(res.data.foods)
+    //         })
+    //         .catch(err => {
+    //             setSearchIngredients([])
+    //             console.log(err)
+    //         })
+    // }, [ingredient])
 
     const handleSave = () => {
         onSave(ingredients)

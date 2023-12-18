@@ -11,7 +11,6 @@ import {
     TwitterAuthProvider,
     updateProfile
 } from 'firebase/auth'
-import { isAdmin, makeUserAdminWithToken } from "services/user"
 
 interface UserContext {
     user: User | null;
@@ -22,7 +21,6 @@ interface UserContext {
     logOut: () => Promise<void>;
     signUp: (email: string, password: string) => Promise<UserCredential>;
     update: (user: User, displayName: string) => Promise<void>;
-    makeUserAdmin: (user: User, token: string) => Promise<void>;
 }
 
 const UserContext = createContext({} as UserContext)
@@ -65,19 +63,9 @@ export function UserProvider({ children }: UserProviderProps) {
         })
     }
 
-    const makeUserAdmin = (user: User, token: string) => {
-        return makeUserAdminWithToken(user.uid, token)
-    }
-
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setUser(user)
-            if (user) {
-                isAdmin(user.uid)
-                    .then(a => {
-                        setAdmin(a)
-                    })
-            }
         })
 
         return unsubscribe
@@ -91,8 +79,7 @@ export function UserProvider({ children }: UserProviderProps) {
         logInTwitter,
         logOut,
         signUp,
-        update,
-        makeUserAdmin
+        update
     }
 
     return (

@@ -6,7 +6,6 @@ import { useUser } from 'contexts/UserContext'
 import { Error, defaultError, validateConfirmPassword, validateEmail, validatePassword, validateUsername } from '../../utils/validation'
 import Router from 'next/router'
 import { getAuth } from 'firebase/auth'
-import { updateUserProfile } from 'services/user'
 import { createProfile } from 'utils/profile'
 
 export default function CreateAuth() {
@@ -26,12 +25,10 @@ export default function CreateAuth() {
     const { signUp, update } = useUser()
 
     const validate = () => {
-        let isValid = validateUsername(username, setUsernameError)
-        isValid = validateEmail(email, setEmailError) && isValid
-        isValid = validatePassword(password, setPasswordError) && isValid
-        isValid = validateConfirmPassword(confirmPassword, password, setConfirmPasswordError) && isValid
-
-        return isValid
+        return validateUsername(username, setUsernameError)
+            && validateEmail(email, setEmailError)
+            && validatePassword(password, setPasswordError)
+            && validateConfirmPassword(confirmPassword, password, setConfirmPasswordError)
     }
 
     const handleCreate = async () => {
@@ -43,6 +40,8 @@ export default function CreateAuth() {
             await signUp(email, password)
 
             const user = getAuth().currentUser
+
+            if (!user) return
 
             await update(user, username)
             await createProfile(user)

@@ -28,9 +28,9 @@ export default ({ onCreate }: FormProps) => {
             ingredients,
             steps,
             user: {
-                id: user?.uid,
-                name: user?.displayName,
-                image: user?.photoURL
+                id: user?.uid || "",
+                name: user?.displayName || "",
+                image: user?.photoURL || ""
             }
         };
         onCreate(recipe);

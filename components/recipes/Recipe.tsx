@@ -12,7 +12,7 @@ interface RecipeProps {
     editable?: boolean;
 }
 
-function Recipe({recipe: { id, name, description, date, image, tags, approved=false, user: { name: username, image: userimg, id: uid }}, onDelete, onApprove, editable }: RecipeProps) {
+function Recipe({ recipe: { id, name, description, date, image, tags, approved = false, user: { name: username, image: userimg, id: uid } }, onDelete, onApprove, editable }: RecipeProps) {
     const handleViewRecipe = () => {
         Router.push(`/recipes/${id}`)
     }
@@ -23,7 +23,7 @@ function Recipe({recipe: { id, name, description, date, image, tags, approved=fa
 
     return (
         <div className="w-full overflow-hidden bg-white rounded-3xl border flex flex-col">
-            {image && <img className="w-full" src={image} />}
+            {image && <img className="w-full" src={image} alt='img' />}
             <div className="p-6 flex flex-col justify-between gap-3 grow">
                 <div className="flex flex-col gap-3">
                     {tags && <div className="flex gap-3">
