@@ -23,5 +23,5 @@ export default function Settings() {
                 </SettingPage>
             </SettingGroup>
         </Layout>
-    )
+    );
 }

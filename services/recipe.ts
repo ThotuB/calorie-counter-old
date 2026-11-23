@@ -1,34 +1,34 @@
-import axios, { AxiosResponse } from "axios";
-import { RecipesDto } from "types/recipe";
+import axios from 'axios';
+import { RecipeDto, RecipesDto } from 'types/recipe';
 
-const baseUrl = 'http://localhost:3000/api';
+const baseUrl = '/api';
 
-export const getRecipes = async (pageNumber: number, pageSize: number, userId: string = ''): Promise<AxiosResponse<any, RecipesDto>> => {
-    return await axios.get(`${baseUrl}/recipes`, {
-        pageNumber,
-        pageSize,
-        userId
+export const getRecipes = async (pageNumber: number, pageSize: number, userId: string = '') => {
+    return await axios.get<RecipesDto>(`${baseUrl}/recipes`, {
+        params: {
+            pageNumber,
+            pageSize,
+            userId: userId || undefined
+        }
     });
-}
+};
 
-export const getRecipe = async (recipeId: string): Promise<AxiosResponse<any, RecipesDto>> => {
-    return await axios.get(`${baseUrl}/recipe/${recipeId}`);
-}
+export const getRecipe = async (recipeId: string) => {
+    return await axios.get<RecipeDto>(`${baseUrl}/recipe/${recipeId}`);
+};
 
-interface UpdateRecipeDto {
-    id: string;
-    name: string | undefined;
-    description: string | undefined;
-    image: string | undefined;
-    ingredients: string[] | undefined;
-    steps: string[] | undefined;
-    approved: boolean | undefined;
-}
+export type CreateRecipeDto = Omit<RecipeDto, 'id'>;
+
+export const createRecipe = async (recipe: CreateRecipeDto): Promise<void> => {
+    await axios.post(`${baseUrl}/recipes`, recipe);
+};
+
+export type UpdateRecipeDto = Partial<Omit<RecipeDto, 'id' | 'user'>> & { id: string };
 
 export const updateRecipe = async (recipe: UpdateRecipeDto): Promise<void> => {
-    return await axios.put(`${baseUrl}/recipe/${recipe.id}`, recipe);
-}
+    await axios.put(`${baseUrl}/recipe/${recipe.id}`, recipe);
+};
 
 export const deleteRecipe = async (recipeId: string): Promise<void> => {
-    return await axios.delete(`${baseUrl}/recipe/${recipeId}`);
-}
+    await axios.delete(`${baseUrl}/recipe/${recipeId}`);
+};

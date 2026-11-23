@@ -1,21 +1,22 @@
-import InfoField from "../form/InfoFields";
-import IngredientField from "../form/IngredientField";
-import StepField from "../form/StepField";
-import Divider from "components/common/Divider";
-import { useState } from "react";
-import Button from "components/common/Button";
-import { useUser } from "contexts/UserContext";
-import { RecipeDto, IRecipeInfo, IRecipeIngredient } from "types/recipe";
+import InfoField from '../form/InfoFields';
+import IngredientField from '../form/IngredientField';
+import StepField from '../form/StepField';
+import Divider from 'components/common/Divider';
+import { useState } from 'react';
+import Button from 'components/common/Button';
+import { useUser } from 'contexts/UserContext';
+import { IRecipeInfo, IRecipeIngredient } from 'types/recipe';
+import { CreateRecipeDto } from 'services/recipe';
 
 interface FormProps {
-    onCreate: (recipe: RecipeDto) => void;
+    onCreate: (recipe: CreateRecipeDto) => void;
 }
 
 export default ({ onCreate }: FormProps) => {
     const [info, setInfo] = useState<IRecipeInfo>({
-        name: "",
-        description: "",
-        image: ""
+        name: '',
+        description: '',
+        image: ''
     });
     const [ingredients, setIngredients] = useState<IRecipeIngredient[]>([]);
     const [steps, setSteps] = useState<string[]>([]);
@@ -23,18 +24,18 @@ export default ({ onCreate }: FormProps) => {
     const { user } = useUser();
 
     const handleCreate = () => {
-        const recipe: RecipeDto = {
+        const recipe: CreateRecipeDto = {
             ...info,
             ingredients,
             steps,
             user: {
-                id: user?.uid || "",
-                name: user?.displayName || "",
-                image: user?.photoURL || ""
+                id: user?.uid || '',
+                name: user?.displayName || '',
+                image: user?.photoURL || ''
             }
         };
         onCreate(recipe);
-    }
+    };
 
     return (
         <div className="w-full bg-gray-100 rounded-md border p-4 flex flex-col gap-6">
@@ -50,11 +51,9 @@ export default ({ onCreate }: FormProps) => {
 
             <Divider />
 
-            <Button className="rounded-2xl"
-                onClick={handleCreate}
-            >
+            <Button className="rounded-2xl" onClick={handleCreate}>
                 SAVE EDIT
             </Button>
         </div>
     );
-}
+};

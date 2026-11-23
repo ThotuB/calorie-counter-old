@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from 'react';
 
 export interface Error {
     error: boolean;
@@ -7,18 +7,17 @@ export interface Error {
 
 export const defaultError: Error = {
     error: false,
-    message: '',
+    message: ''
 };
 
 const setError = (message: string): Error => {
     return {
         error: true,
-        message,
+        message
     };
 };
 
-type ErrorFn = Dispatch<SetStateAction<Error>>
-
+type ErrorFn = Dispatch<SetStateAction<Error>>;
 
 export const validateUsername = (username: string, setUsernameError: ErrorFn) => {
     if (username.length < 5) {
@@ -27,7 +26,7 @@ export const validateUsername = (username: string, setUsernameError: ErrorFn) =>
     }
     setUsernameError(defaultError);
     return true;
-}
+};
 
 export const validateEmail = (email: string, setEmailError: ErrorFn) => {
     if (!email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
@@ -36,34 +35,38 @@ export const validateEmail = (email: string, setEmailError: ErrorFn) => {
     }
     setEmailError(defaultError);
     return true;
-}
+};
 
 export const validatePassword = (password: string, setPasswordError: ErrorFn) => {
     if (password.length < 8) {
         setPasswordError(setError('Password must be at least 8 characters'));
         return false;
     }
-    if (!password.search(/[a-z]/)) {
+    if (!/[a-z]/.test(password)) {
         setPasswordError(setError('Password must contain at least one lowercase letter'));
         return false;
     }
-    if (!password.search(/[A-Z]/)) {
+    if (!/[A-Z]/.test(password)) {
         setPasswordError(setError('Password must contain at least one uppercase letter'));
         return false;
     }
-    if (!password.search(/[0-9]/)) {
+    if (!/[0-9]/.test(password)) {
         setPasswordError(setError('Password must contain at least one number'));
         return false;
     }
     setPasswordError(defaultError);
     return true;
-}
+};
 
-export const validateConfirmPassword = (password: string, confirmPassword: string, setConfirmPasswordError: ErrorFn) => {
+export const validateConfirmPassword = (
+    password: string,
+    confirmPassword: string,
+    setConfirmPasswordError: ErrorFn
+) => {
     if (password !== confirmPassword) {
         setConfirmPasswordError(setError('Passwords do not match'));
         return false;
     }
     setConfirmPasswordError(defaultError);
     return true;
-}
+};

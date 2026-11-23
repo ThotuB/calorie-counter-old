@@ -1,5 +1,5 @@
-import Nutrients, { Nutrient } from 'components/food/[foodId]/Nutrients'
-import Layout from 'components/layouts/navigation/Layout'
+import Nutrients, { Nutrient } from 'components/food/[foodId]/Nutrients';
+import Layout from 'components/layouts/navigation/Layout';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
@@ -20,23 +20,15 @@ export default function Food({ id, apiKey }: Props) {
             params: {
                 api_key: apiKey
             }
-        }
+        };
 
-        axios.get(url, query)
-            .then(res => {
-                setFood(res.data);
-                setLoading(false);
-            })
-    }, [])
+        axios.get(url, query).then((res) => {
+            setFood(res.data);
+            setLoading(false);
+        });
+    }, []);
 
-    return (
-        <Layout>
-            {loading ?
-                <Loading /> :
-                <Nutrients food={food} />
-            }
-        </Layout>
-    );
+    return <Layout>{loading ? <Loading /> : <Nutrients food={food} />}</Layout>;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -48,5 +40,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             id: id,
             apiKey: apiKey
         }
-    }
-}
+    };
+};

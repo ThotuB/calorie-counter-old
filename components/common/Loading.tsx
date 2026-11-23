@@ -7,5 +7,5 @@ export default function Loading() {
             <div className="h-3 w-3 rounded-full bg-red-300 animate-load-4" />
             <div className="h-3 w-3 rounded-full bg-red-300 animate-load-5" />
         </div>
-    )
+    );
 }

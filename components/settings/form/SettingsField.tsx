@@ -1,4 +1,4 @@
-import TextField from "components/common/TextField";
+import TextField from 'components/common/TextField';
 
 interface EditProfileFieldProps {
     label?: string;
@@ -8,14 +8,8 @@ interface EditProfileFieldProps {
 export default function EditProfileField({ label, children }: EditProfileFieldProps) {
     return (
         <>
-            <div className="text-gray-800 font-bold text-right">
-                {label}
-            </div>
-            <div className="col-span-4">
-                {children}
-            </div>
+            <div className="text-gray-800 font-bold text-right">{label}</div>
+            <div className="col-span-4">{children}</div>
         </>
-    )
-
-
+    );
 }

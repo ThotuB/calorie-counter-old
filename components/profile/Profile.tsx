@@ -1,5 +1,5 @@
-import ProfileInfoContainer from "./ProfileInfoContainer";
-import ProfileRecipes from "./ProfileRecipes";
+import ProfileInfoContainer from './ProfileInfoContainer';
+import ProfileRecipes from './ProfileRecipes';
 
 interface ProfileProps {
     uid: string;
@@ -11,5 +11,5 @@ export default function Profile({ uid }: ProfileProps) {
             <ProfileInfoContainer uid={uid} />
             <ProfileRecipes userId={uid} />
         </div>
-    )
+    );
 }

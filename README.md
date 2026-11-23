@@ -2,7 +2,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Copy `.env.example` to `.env.local` and fill in the values:
+
+- `MONGODB_URI`: MongoDB connection string (the `recipes` and `users` databases are used)
+- `USDA_API_KEY`: [USDA FoodData Central](https://fdc.nal.usda.gov/api-key-signup.html) API key
+- `NEXT_PUBLIC_EDAMAM_APP_ID` / `NEXT_PUBLIC_EDAMAM_APP_KEY`: Edamam API credentials
+- `NEXT_PUBLIC_FIREBASE_*`: Firebase web app config (Firebase console → Project settings → Your apps)
+
+Then run the development server:
 
 ```bash
 npm run dev

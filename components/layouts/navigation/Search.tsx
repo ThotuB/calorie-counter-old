@@ -1,19 +1,19 @@
-import { Search } from 'components/common/svg/Heroicons'
-import { useState } from 'react'
-import Router from 'next/router'
+import { Search } from 'components/common/svg/Heroicons';
+import { useState } from 'react';
+import Router from 'next/router';
 
 function SearchBar() {
-    const [searchResult, setSearchResult] = useState('')
+    const [searchResult, setSearchResult] = useState('');
 
     const handleChange = (searchTerm: string) => {
-        setSearchResult(searchTerm)
+        setSearchResult(searchTerm);
         Router.push({
             pathname: '/food',
             query: {
                 search: searchTerm
             }
-        })
-    }
+        });
+    };
 
     return (
         <div className="flex items-center">

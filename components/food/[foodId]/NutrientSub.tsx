@@ -12,5 +12,5 @@ export default function NutrientSub({ label, quantity, unit }: NutrientProps) {
                 <Nutrient label={label} quantity={quantity} unit={unit} />
             </div>
         </div>
-    )
+    );
 }

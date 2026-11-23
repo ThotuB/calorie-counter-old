@@ -1,17 +1,13 @@
-import RecipeForm from 'components/recipes/create/CreateForm'
-import CreateForm from 'components/recipes/create/CreateForm'
-import axios from 'axios';
+import CreateForm from 'components/recipes/create/CreateForm';
 import Router from 'next/router';
-import { RecipeDto } from 'types/recipe';
+import { createRecipe, CreateRecipeDto } from 'services/recipe';
 
 export default function RecipeCreatePage() {
-    const handleCreate = async (recipe: RecipeDto) => {
-        await axios.post('/api/recipes', recipe);
+    const handleCreate = async (recipe: CreateRecipeDto) => {
+        await createRecipe(recipe);
 
         Router.push('/recipes');
-    }
+    };
 
-    return (
-        <CreateForm onCreate={handleCreate} />
-    );
+    return <CreateForm onCreate={handleCreate} />;
 }

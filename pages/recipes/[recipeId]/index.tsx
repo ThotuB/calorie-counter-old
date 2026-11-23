@@ -1,35 +1,38 @@
-import axios from "axios";
-import Loading from "components/common/Loading";
-import Layout from "components/layouts/navigation/Layout";
-import Recipe from "components/recipes/[recipeId]/Recipe";
-import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
-import { getRecipe } from "services/recipe";
-import { RecipeDto } from "types/recipe";
+import Loading from 'components/common/Loading';
+import Layout from 'components/layouts/navigation/Layout';
+import Recipe from 'components/recipes/[recipeId]/Recipe';
+import { GetServerSideProps } from 'next';
+import { useEffect, useState } from 'react';
+import { getRecipe } from 'services/recipe';
+import { RecipeDto } from 'types/recipe';
 
 interface Props {
     id: string;
 }
 
-export default ({ id }: Props) => {
+export default function RecipePage({ id }: Props) {
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [recipe, setRecipe] = useState<RecipeDto>({} as RecipeDto);
 
     useEffect(() => {
+        setLoading(true);
+        setError(false);
         getRecipe(id)
-            .then(res => {
+            .then((res) => {
                 setRecipe(res.data);
-                setLoading(false);
             })
-    }, [])
+            .catch((err) => {
+                console.error(err);
+                setError(true);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [id]);
 
     return (
-        <Layout>
-            {loading ?
-                <Loading /> :
-                <Recipe recipe={recipe} />
-            }
-        </Layout>
+        <Layout>{loading ? <Loading /> : error ? <div>Could not load recipe</div> : <Recipe recipe={recipe} />}</Layout>
     );
 }
 
@@ -40,5 +43,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         props: {
             id: recipeId as string
         }
-    }
-}
+    };
+};

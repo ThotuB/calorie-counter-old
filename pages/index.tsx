@@ -1,7 +1,5 @@
-import Auth from 'components/auth/Auth'
+import Auth from 'components/auth/Auth';
 
 export default function Index() {
-    return (
-        <Auth />
-    );
+    return <Auth />;
 }

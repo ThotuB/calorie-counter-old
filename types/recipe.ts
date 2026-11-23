@@ -8,13 +8,13 @@ export interface RecipeDto {
         id: string;
         name: string;
         quantity: string;
-    }[]
+    }[];
     steps: string[];
     user: {
         id: string;
         name: string;
         image: string;
-    }
+    };
 }
 
 export interface RecipeSummaryDto {
@@ -25,11 +25,11 @@ export interface RecipeSummaryDto {
     date: string;
     tags?: string[];
     approved?: boolean;
-    user : {
+    user: {
         id: string;
         name: string;
         image: string;
-    }
+    };
 }
 
 export interface RecipesDto {

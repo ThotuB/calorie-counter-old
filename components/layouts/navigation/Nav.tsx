@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import NavLink from "./NavLink";
-import SearchBar from "./Search";
-import DropdownMenu from "./Menu";
-import AccountIcon from "components/common/AccountIcon";
-import { useUser } from "contexts/UserContext";
+import NavLink from './NavLink';
+import SearchBar from './Search';
+import DropdownMenu from './Menu';
+import AccountIcon from 'components/common/AccountIcon';
+import { useUser } from 'contexts/UserContext';
 
 export default function Nav() {
     let { user } = useUser();
@@ -23,14 +23,15 @@ export default function Nav() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <NavLink href="/home" label='Home' />
-                        <NavLink href="/food" label='Food' />
-                        <NavLink href="/recipes" label='Recipes' />
+                        <NavLink href="/home" label="Home" />
+                        <NavLink href="/food" label="Food" />
+                        <NavLink href="/recipes" label="Recipes" />
 
-                        {user ?
-                            <AccountIcon name={user.displayName} image={user.photoURL} id={user.uid}/> :
-                            <NavLink href='/' label='Login / Sign Up' />
-                        }
+                        {user ? (
+                            <AccountIcon name={user.displayName} image={user.photoURL} id={user.uid} />
+                        ) : (
+                            <NavLink href="/" label="Login / Sign Up" />
+                        )}
                         <DropdownMenu />
                     </div>
                 </div>

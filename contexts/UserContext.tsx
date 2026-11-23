@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react"
-import { auth } from 'utils/firebase'
+import { createContext, useContext, useEffect, useState } from 'react';
+import { auth } from 'utils/firebase';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -10,7 +10,8 @@ import {
     GoogleAuthProvider,
     TwitterAuthProvider,
     updateProfile
-} from 'firebase/auth'
+} from 'firebase/auth';
+import { isAdmin, makeUserAdminWithToken } from 'services/user';
 
 interface UserContext {
     user: User | null;
@@ -21,12 +22,13 @@ interface UserContext {
     logOut: () => Promise<void>;
     signUp: (email: string, password: string) => Promise<UserCredential>;
     update: (user: User, displayName: string) => Promise<void>;
+    makeUserAdmin: (user: User, token: string) => Promise<void>;
 }
 
-const UserContext = createContext({} as UserContext)
+const UserContext = createContext({} as UserContext);
 
 export function useUser() {
-    return useContext(UserContext)
+    return useContext(UserContext);
 }
 
 interface UserProviderProps {
@@ -34,42 +36,51 @@ interface UserProviderProps {
 }
 
 export function UserProvider({ children }: UserProviderProps) {
-    const [user, setUser] = useState<User | null>({} as User)
-    const [admin, setAdmin] = useState(false)
+    const [user, setUser] = useState<User | null>(null);
+    const [admin, setAdmin] = useState(false);
 
     const signUp = (email: string, password: string) => {
-        return createUserWithEmailAndPassword(auth, email, password)
-    }
+        return createUserWithEmailAndPassword(auth, email, password);
+    };
 
     const logIn = (email: string, password: string) => {
-        return signInWithEmailAndPassword(auth, email, password)
-    }
+        return signInWithEmailAndPassword(auth, email, password);
+    };
 
     const logInGoogle = () => {
-        return signInWithPopup(auth, new GoogleAuthProvider())
-    }
+        return signInWithPopup(auth, new GoogleAuthProvider());
+    };
 
     const logInTwitter = () => {
-        return signInWithPopup(auth, new TwitterAuthProvider())
-    }
+        return signInWithPopup(auth, new TwitterAuthProvider());
+    };
 
     const logOut = () => {
-        return signOut(auth)
-    }
+        return signOut(auth);
+    };
 
     const update = (user: User, username: string) => {
         return updateProfile(user, {
             displayName: username
-        })
-    }
+        });
+    };
+
+    const makeUserAdmin = async (user: User, token: string) => {
+        await makeUserAdminWithToken(user.uid, token);
+        setAdmin(true);
+    };
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            setUser(user)
-        })
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setUser(user);
+            setAdmin(false);
+            if (user) {
+                isAdmin(user.uid).then(setAdmin).catch(console.error);
+            }
+        });
 
-        return unsubscribe
-    }, [])
+        return unsubscribe;
+    }, []);
 
     const value = {
         user,
@@ -79,12 +90,9 @@ export function UserProvider({ children }: UserProviderProps) {
         logInTwitter,
         logOut,
         signUp,
-        update
-    }
+        update,
+        makeUserAdmin
+    };
 
-    return (
-        <UserContext.Provider value={value}>
-            {children}
-        </UserContext.Provider>
-    )
+    return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

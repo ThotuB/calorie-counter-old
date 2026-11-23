@@ -1,25 +1,16 @@
-import { Star } from '../common/svg/Icons'
+import { Star } from '../common/svg/Icons';
 
-function Rating(props) {
-    let { rating } = props;
+interface RatingProps {
+    rating: number;
+}
 
+function Rating({ rating }: RatingProps) {
     const stars = [];
     for (let i = 0; i < 5; i++) {
-        stars[i] = <Star
-            key={i}
-            fill={
-                i < rating - 0.5 ? "full" 
-                    : i < rating ? "half"
-                        : "none"
-            }
-        />
+        stars[i] = <Star key={i} fill={i < rating - 0.5 ? 'full' : i < rating ? 'half' : 'none'} />;
     }
 
-    return (
-        <div className="flex item-center">
-            {stars}
-        </div>
-    );
+    return <div className="flex item-center">{stars}</div>;
 }
 
 export default Rating;

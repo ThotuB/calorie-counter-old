@@ -20,38 +20,44 @@ export default function Index({ apiKey, search }: Props) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const url = `https://api.nal.usda.gov/fdc/v1/search`
+        const url = `https://api.nal.usda.gov/fdc/v1/search`;
         const query = {
             params: {
                 api_key: apiKey,
                 generalSearchInput: search,
                 dataType: 'Branded',
                 pageNumber: page,
-                pageSize: 10,
+                pageSize: 10
             }
-        }
+        };
 
         setLoading(true);
-        axios.get(url, query)
-            .then(res => {
+        axios
+            .get(url, query)
+            .then((res) => {
                 setFoods(res.data.foods);
                 setPages(res.data.totalPages);
                 setTotal(res.data.totalHits);
                 setLoading(false);
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
-            })
+            });
     }, [search, page]);
 
     return (
         <Layout>
             <div className="max-w-3xl w-full">
-                <Summary goal={0} food={0} excercise={0} macros={{
-                    protein: 0,
-                    carbs: 0,
-                    fat: 0
-                }} />
+                <Summary
+                    goal={0}
+                    food={0}
+                    excercise={0}
+                    macros={{
+                        protein: 0,
+                        carbs: 0,
+                        fat: 0
+                    }}
+                />
             </div>
             {loading ? <Loading /> : <FoodList items={foods} />}
             <Pagination page={page} count={pages} onPageChange={setPage} />
@@ -68,5 +74,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             apiKey: apiKey,
             search: search
         }
-    }
-}
+    };
+};

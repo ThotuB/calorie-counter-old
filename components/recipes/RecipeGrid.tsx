@@ -1,17 +1,17 @@
-import { RecipeSummaryDto } from "types/recipe";
-import RecipeItem from "./Recipe";
+import { RecipeSummaryDto } from 'types/recipe';
+import RecipeItem from './Recipe';
 
 interface RecipesProps {
-    recipes: RecipeSummaryDto[],
+    recipes: RecipeSummaryDto[];
     onDelete?: (id: string) => void;
     onApprove?: (id: string, approval: boolean) => void;
-    editable?: boolean,
+    editable?: boolean;
 }
 
 function Recipes({ recipes, onDelete, onApprove, editable }: RecipesProps) {
     return (
         <div className="w-full grid grid-cols-2 gap-6">
-            {recipes.map(recipe => (
+            {recipes.map((recipe) => (
                 <RecipeItem
                     key={recipe.id}
                     recipe={recipe}
@@ -21,7 +21,7 @@ function Recipes({ recipes, onDelete, onApprove, editable }: RecipesProps) {
                 />
             ))}
         </div>
-    )
+    );
 }
 
 export default Recipes;

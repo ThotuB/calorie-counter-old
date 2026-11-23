@@ -1,8 +1,7 @@
+import { IRecipeIngredient } from 'types/recipe';
+
 interface IngredientsProps {
-    ingredients: {
-        name: string;
-        quantity: number;
-    }[]
+    ingredients: IRecipeIngredient[];
 }
 
 export default function Ingredients({ ingredients }: IngredientsProps) {
@@ -17,5 +16,5 @@ export default function Ingredients({ ingredients }: IngredientsProps) {
                 </div>
             ))}
         </div>
-    )
+    );
 }

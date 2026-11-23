@@ -2,12 +2,12 @@ import { FoodDto, NutrientDto } from 'types/food';
 import Food from './Food';
 
 interface FoodListProps {
-    items: FoodDto[]
+    items: FoodDto[];
 }
 
 export default function FoodList({ items }: FoodListProps) {
     return (
-        <div className='flex flex-col gap-4 mb-4 w-full'>
+        <div className="flex flex-col gap-4 mb-4 w-full">
             {items.map((item) => {
                 const { fdcId, brandName, brandOwner, description, foodNutrients, servingSize, servingSizeUnit } = item;
                 const rating = 3;
@@ -18,7 +18,7 @@ export default function FoodList({ items }: FoodListProps) {
                     fat: findNutrientValue(foodNutrients, 1004),
                     carbs: findNutrientValue(foodNutrients, 1005)
                 };
-                const calories = Math.round(macros.calories / 100 * servingSize);
+                const calories = Math.round((macros.calories / 100) * servingSize);
                 const serving = Math.round(servingSize);
 
                 return (
@@ -41,6 +41,6 @@ export default function FoodList({ items }: FoodListProps) {
 }
 
 function findNutrientValue(nutrients: NutrientDto[], id: number) {
-    const nutrient = nutrients.find(nutrient => nutrient.nutrientId === id)
+    const nutrient = nutrients.find((nutrient) => nutrient.nutrientId === id);
     return nutrient ? nutrient.value : 0;
 }

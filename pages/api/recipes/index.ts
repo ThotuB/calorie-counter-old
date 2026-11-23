@@ -1,66 +1,60 @@
-import { MongoClient } from 'mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getDb } from 'utils/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'GET') {
-        const { pageNumber, pageSize, userId } = req.query;
-        const page = parseInt(pageNumber as string, 10) || 0;
-        const size = parseInt(pageSize as string, 10) || 10;
-
-        const client = await MongoClient.connect(
-            'mongodb+srv://admin:WF0qDFsvY6ux716Q@thotu.lmwwa.mongodb.net/recipes?retryWrites=true&w=majority'
-        );
-        const db = client.db();
-
+    try {
+        const db = await getDb('recipes');
         const collection = db.collection('recipes');
 
-        const result = await collection
-            .find(userId ? { "user.id": userId } : {})
-            .skip(page > 0 ? (page - 1) * size : 0)
-            .limit(size)
-            .toArray();
-        const total = await collection.countDocuments();
+        if (req.method === 'GET') {
+            const { pageNumber, pageSize, userId } = req.query;
+            const page = parseInt(pageNumber as string, 10) || 0;
+            const size = parseInt(pageSize as string, 10) || 10;
 
-        client.close()
+            const filter = userId ? { 'user.id': userId as string } : {};
 
-        res.status(200).json({
-            entries: total,
-            pages: Math.ceil(total / size),
-            recipes: result.map(recipe => {
-                return {
-                    id: recipe._id.toString(),
-                    name: recipe.name,
-                    description: recipe.description,
-                    image: recipe.image,
-                    approved: recipe.approved,
-                    user: {
-                        id: recipe.user.id,
-                        name: recipe.user.name,
-                        image: recipe.user.image
-                    }
-                }
-            })
-        })
-    }
+            const result = await collection
+                .find(filter)
+                .skip(page > 0 ? (page - 1) * size : 0)
+                .limit(size)
+                .toArray();
+            const total = await collection.countDocuments(filter);
 
-    if (req.method === 'POST') {
-        const data = req.body;
+            res.status(200).json({
+                entries: total,
+                pages: Math.ceil(total / size),
+                recipes: result.map((recipe) => {
+                    return {
+                        id: recipe._id.toString(),
+                        name: recipe.name,
+                        description: recipe.description,
+                        image: recipe.image,
+                        approved: recipe.approved,
+                        user: {
+                            id: recipe.user.id,
+                            name: recipe.user.name,
+                            image: recipe.user.image
+                        }
+                    };
+                })
+            });
+            return;
+        }
 
-        const client = await MongoClient.connect(
-            'mongodb+srv://admin:WF0qDFsvY6ux716Q@thotu.lmwwa.mongodb.net/recipes?retryWrites=true&w=majority'
-        );
-        const db = client.db();
+        if (req.method === 'POST') {
+            const result = await collection.insertOne(req.body);
 
-        const collection = db.collection('recipes');
+            res.status(201).json({
+                message: 'Recipe added',
+                id: result.insertedId.toString()
+            });
+            return;
+        }
 
-        const result = await collection.insertOne(data)
-
-        console.log(result)
-
-        client.close()
-
-        res.status(201).json({
-            message: 'Recipe added',
-        })
+        res.setHeader('Allow', ['GET', 'POST']);
+        res.status(405).json({ message: 'Method not allowed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
